@@ -13,5 +13,5 @@ public class ZooInfo {
     public String E_Info;
     //public String E_Memo;
     //public String E_Geo;
-    //public String E_URL;
+    public String E_URL;
 }

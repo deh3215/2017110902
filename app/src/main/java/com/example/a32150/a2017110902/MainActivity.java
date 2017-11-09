@@ -1,10 +1,15 @@
 package com.example.a32150.a2017110902;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     //ImageView iv;
     MyAdapter adapter;
     ListView lv;
-
+    Zoo z;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,41 +39,35 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Gson gson = new Gson();
-                        Zoo z = gson.fromJson(response, Zoo.class);
+                        z = gson.fromJson(response, Zoo.class);
                         //count = z.result.count;
-                        Log.d("ZOO", z.result.results[0].E_Name);
+                        //Log.d("ZOO", z.result.results[0].E_Name);
                         adapter = new MyAdapter(MainActivity.this, z.result.results);
                         lv.setAdapter(adapter);
-
-
-
 //                        for(int i=0; i<count; i++)  {
 //                            //Picasso.with(MainActivity.this).load(z.result.results[0].E_Pic_URL).into(iv);
-//
-//
 //                        }
-//                        Log.d("Zoo Count",z.result.count );
-//                        Log.d("ZOO E_Name", z.result.results[0].E_Name);
-//                        Log.d("ZOO _id", z.result.results[0]._id);
-//                        Log.d("ZOO E_Category", z.result.results[0].E_Category);
-//                        Log.d("ZOO E_Geo", z.result.results[0].E_Geo);
-//                        Log.d("ZOO E_Info", z.result.results[0].E_Info);
-//                        Log.d("ZOO E_Memo", z.result.results[0].E_Memo);
-//                        Log.d("ZOO E_no", z.result.results[0].E_no);
-//                        Log.d("ZOO E_Pic_URL", z.result.results[0].E_Pic_URL);
-//                        Log.d("ZOO E_URL", z.result.results[0].E_URL);
-                        //Picasso.with(MainActivity.this).load(z.result.results[0].E_Pic_URL).into(iv);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("ZOO", "Error:" + error.toString());
+                //Log.d("ZOO", "Error:" + error.toString());
             }
         });
         queue.add(request);
         queue.start();
 
+        lv.setOnItemClickListener(listener);
     }
+    AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            Uri uri = Uri.parse(z.result.results[i].E_URL);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.setData(uri);
+            startActivity(intent);
+        }
+    };
 
 
 

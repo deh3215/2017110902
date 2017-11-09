@@ -46,21 +46,30 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-    LayoutInflater inflater = LayoutInflater.from(context);
-        View v = inflater.inflate(R.layout.myitem, null);
-        TextView tv = (TextView) v.findViewById(R.id.textView);
-        tv.setText(zooInfo[i].E_Name);
-        ImageView iv =(ImageView)v.findViewById(R.id.imageView);
-        TextView tv1 = (TextView) v.findViewById(R.id.textView2);
-        tv1.setText(zooInfo[i].E_Info);
-        Picasso.with(context).load(zooInfo[i].E_Pic_URL).into(iv);
-        return v;
+    //LayoutInflater inflater = LayoutInflater.from(context);
+        ViewHolder holder;
+        LayoutInflater inflator = LayoutInflater.from(context);
+        if(view == null)    {
+            view = inflator.inflate(R.layout.myitem, null);//解出Layout 解壓器,消耗資源
+            holder = new ViewHolder();
+            holder.name = (TextView)view.findViewById(R.id.textView);
+            holder.statement = (TextView)view.findViewById(R.id.textView2);
+            holder.img =(ImageView)view.findViewById(R.id.imageView);
+            view.setTag(holder);//要加,不然listview滑動會當掉
+            holder.name.setText(zooInfo[i].E_Name);
+            holder.statement.setText(zooInfo[i].E_Info);
+            Picasso.with(context).load(zooInfo[i].E_Pic_URL).into(holder.img);
+        }   else    {
+            holder = (ViewHolder) view.getTag();
+        }
+        return view;
+
     }
 
     static class ViewHolder
     {
-        TextView tv;
+        TextView name;
         ImageView img;
-        TextView tv1;
+        TextView statement;
     }
 }
